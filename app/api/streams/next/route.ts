@@ -1,10 +1,10 @@
 import prisma from "@/app/lib/db";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import { authOptions } from "@/app/lib/authOptions";
 
 export async function GET() {
-    const session = await getServerSession();
-    // TODO: You can get rid of the db call here 
+    const session = await getServerSession(authOptions);
     const user = session?.user
 
    if (!user) {
@@ -32,18 +32,18 @@ export async function GET() {
    console.log(mostUpvotedStream?.id )
  
    await Promise.all([prisma.currentStream.upsert({
-       // @ts-ignore
+       
        where: {
-           // @ts-ignore
-           userId: user.id
-        },
-        update: {
-            // @ts-ignore
-            userId: user.id,
-            streamId: mostUpvotedStream?.id 
-        },
-        create: {
-            // @ts-ignore
+        // @ts-ignore
+        userId: user.id
+    },
+    update: {
+        // @ts-ignore
+        userId: user.id,
+        streamId: mostUpvotedStream?.id 
+    },
+    create: {
+        // @ts-ignore
             userId: user.id,
             streamId: mostUpvotedStream?.id
         }
