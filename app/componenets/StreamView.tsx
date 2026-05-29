@@ -8,12 +8,12 @@ import { ChevronUp, ChevronDown, ThumbsDown, Play, Share2, Axis3DIcon } from "lu
 import 'react-toastify/dist/ReactToastify.css'
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
-// import { YT_REGEX } from '../lib/utils'
-
 //@ts-ignore
 import YouTubePlayer from 'youtube-player';
 import { Appbar } from './Appbar'
 import { toast } from 'sonner'
+import { YT_REGEX } from '../lib/utils'
+import axios from "axios"
 
 interface Video {
     "id": string,
@@ -47,10 +47,8 @@ export default function StreamView({
   const videoPlayerRef = useRef<HTMLDivElement>();
 
   async function refreshStreams() {
-    const res = await fetch(`/api/streams/?creatorId=${creatorId}`, {
-        credentials: "include"
-    });
-    const json = await res.json();
+    const res = await axios(`/api/streams/?creatorId=${creatorId}`);
+    const json = res.data;
     setQueue(json.streams.sort((a: any, b: any) => a.upvotes < b.upvotes ? 1 : -1));
     
     setCurrentVideo(video => {
@@ -247,18 +245,6 @@ export default function StreamView({
                 </div>
             </div>
         </div>
-        <ToastContainer 
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="dark"
-        />
     </div>
   )
 }
