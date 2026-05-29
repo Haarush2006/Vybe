@@ -180,7 +180,7 @@ export default function StreamView({
     <div className="flex flex-col min-h-screen bg-[rgb(10,10,10)] text-gray-200">
         <Appbar />
         <div className='flex justify-center'>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-5 w-screen max-w-screen-xl pt-8">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-5 w-screen max-w-screen-7xl pt-8">
                 <div className='col-span-3'>
                     <div className="space-y-4">
                         <h2 className="text-2xl font-bold text-white">Upcoming Songs</h2>
@@ -194,7 +194,7 @@ export default function StreamView({
                                 alt={`Thumbnail for ${video.title}`}
                                 className="w-30 h-20 object-cover rounded"
                                 />
-                                <div className="flex-grow">
+                                <div className="grow">
                                 <h3 className="font-semibold text-white">{video.title}</h3>
                                 <div className="flex items-center space-x-2 mt-2">
                                     <Button 
