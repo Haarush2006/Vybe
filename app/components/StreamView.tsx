@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 //@ts-ignore
 import { ChevronUp, ChevronDown, ThumbsDown, Play, Share2, Axis3DIcon } from "lucide-react"
-import 'react-toastify/dist/ReactToastify.css'
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 //@ts-ignore
@@ -43,27 +42,47 @@ export default function StreamView({
   const [currentVideo, setCurrentVideo] = useState<Video | null>(null)
   const [loading, setLoading] = useState(false);
   const [playNextLoader, setPlayNextLoader] = useState(false);
+  const [votingId, setVotingId] = useState<string | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 // @ts-ignore
   const videoPlayerRef = useRef<HTMLDivElement>();
 
   async function refreshStreams() {
-    const res = await axios(`/api/streams/?creatorId=${creatorId}`);
-    const json = res.data;
-    setQueue(json.streams.sort((a: any, b: any) => a.upvotes < b.upvotes ? 1 : -1));
-    
-    setCurrentVideo(video => {
-        if (video?.id === json.activeStream?.stream?.id) {
-            return video;
+    try {
+      const res = await axios(`/api/streams/?creatorId=${creatorId}`);
+      const json = res.data;
+      setQueue(json.streams.map((s: any) => ({
+          ...s,
+          haveUpvoted: s.voted ?? s.haveUpvoted ?? false
+      })).sort((a: any, b: any) => a.upvotes < b.upvotes ? 1 : -1));
+      
+      setCurrentVideo(video => {
+          if (video?.id === json.activeStream?.stream?.id) {
+              return video;
+          }
+          return json.activeStream.stream
+      });
+    } catch(e: any) {
+      if (e?.response?.status === 403) {
+        toast.error("You are not logged in. Please sign in to continue.", {
+          position: "bottom-center",
+        });
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
         }
-        return json.activeStream.stream
-    });
+      }
+    }
   }
 
   useEffect(() => {
     refreshStreams();
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
         refreshStreams();
     }, REFRESH_INTERVAL_MS)
+    return () => {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+    }
   }, [])
 
   useEffect(() => {
@@ -105,7 +124,9 @@ export default function StreamView({
     setInputLink('')
   }
 
-  const handleVote = (id: string, isUpvote: boolean) => {
+  const handleVote = async (id: string, isUpvote: boolean) => {
+    if (votingId) return;
+    setVotingId(id);
     setQueue(queue.map(video => 
       video.id === id 
         ? { 
@@ -116,12 +137,17 @@ export default function StreamView({
         : video
     ).sort((a, b) => (b.upvotes) - (a.upvotes)))
 
-    fetch(`/api/streams/${isUpvote ? "upvote" : "downvote"}`, {
-        method: "POST",
-        body: JSON.stringify({
-            streamId: id
-        })
-    })
+    try {
+      await fetch(`/api/streams/${isUpvote ? "upvote" : "downvote"}`, {
+          method: "POST",
+          body: JSON.stringify({
+              streamId: id
+          })
+      })
+    } catch(e) {
+      console.error(e)
+    }
+    setVotingId(null);
   }
 
   const playNext = async () => {
@@ -142,7 +168,7 @@ export default function StreamView({
   }
 
   const handleShare = () => {
-    const shareableLink = `${window.location.hostname}/creator/${creatorId}`
+    const shareableLink = `${window.location.host}/creator/${creatorId}`
     navigator.clipboard.writeText(shareableLink)
     toast.success("Link copied", { 
       position: "bottom-center",
@@ -174,10 +200,11 @@ export default function StreamView({
                                     <Button 
                                     variant="outline" 
                                     size="sm"
+                                    disabled={votingId === video.id}
                                     onClick={() => handleVote(video.id, video.haveUpvoted ? false : true)}
                                     className="flex items-center space-x-1 bg-gray-800 text-white border-gray-700 hover:bg-gray-700"
                                     >
-                                    {video.haveUpvoted ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
+                                    {video.haveUpvoted ? <ChevronUp className="h-4 w-4 text-white" /> : <ChevronUp className="h-4 w-4 text-gray-500" />}
                                     <span>{video.upvotes}</span>
                                     </Button>
                                 </div>
