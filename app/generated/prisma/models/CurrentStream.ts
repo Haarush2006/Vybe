@@ -189,15 +189,15 @@ export type CurrentStreamOrderByWithRelationInput = {
 
 export type CurrentStreamWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  userId?: string
   streamId?: string
   spaceId?: string
   AND?: Prisma.CurrentStreamWhereInput | Prisma.CurrentStreamWhereInput[]
   OR?: Prisma.CurrentStreamWhereInput[]
   NOT?: Prisma.CurrentStreamWhereInput | Prisma.CurrentStreamWhereInput[]
-  userId?: Prisma.StringFilter<"CurrentStream"> | string
   stream?: Prisma.XOR<Prisma.StreamNullableScalarRelationFilter, Prisma.StreamWhereInput> | null
   space?: Prisma.XOR<Prisma.SpaceNullableScalarRelationFilter, Prisma.SpaceWhereInput> | null
-}, "id" | "streamId" | "spaceId">
+}, "id" | "userId" | "streamId" | "spaceId">
 
 export type CurrentStreamOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
