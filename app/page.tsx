@@ -1,4 +1,4 @@
-import { Appbar } from "./componenets/Appbar"
+import { Appbar } from "./components/Appbar"
 
 
 export default function Home() {
