@@ -39,7 +39,15 @@ export async function POST(req:NextRequest){
             msg:"Done"
         })
     }
-    catch(e){
+    catch(e: any){
+        if (e.code === 'P2002') {
+            return NextResponse.json({
+                msg:"Already upvoted"
+            },{
+                status:400
+            })
+        }
+        console.log(e)
         return NextResponse.json({
             msg:"Error while upvoting"
         },{
