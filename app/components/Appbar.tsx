@@ -1,21 +1,20 @@
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 //@ts-ignore
 import { Music } from "lucide-react"
 
 export function Appbar() {
     const session = useSession();
 
-    return <div className="flex justify-between px-20 pt-4">
-        <div className="text-lg font-bold flex flex-col justify-center text-white">
-            Muzer
+    return <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 justify-between">
+            <Music className="h-6 w-6 text-primary" />
+            <span className="text-2xl font-bold text-foreground">Vybe</span>
         </div>
         <div>
-            {session.data?.user && <Button className="bg-purple-600 text-white hover:bg-purple-700" onClick={() => signOut()}>Logout</Button>}
-            {!session.data?.user &&<Button className="bg-purple-600 text-white hover:bg-purple-700" onClick={() => signIn()}>Signin</Button>}
+            {session.data?.user && <Button variant="outline" className="border-border text-foreground hover:bg-primary/20 hover:text-primary" onClick={() => signOut()}>Logout</Button>}
+            {!session.data?.user && <Button className="bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => signIn()}>Signin</Button>}
         </div>
     </div>
 }
