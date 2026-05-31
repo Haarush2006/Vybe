@@ -208,14 +208,14 @@ export default function StreamView({
                                 </div>
                             ) : (
                                 <>
-                                    <div className="flex-shrink-0 w-32 h-32 bg-card rounded overflow-hidden">
+                                    <div className="shrink-0 w-32 h-32 bg-card rounded overflow-hidden">
                                         <img
                                             src={currentVideo.bigImg}
                                             alt={currentVideo.title}
                                             className="w-full h-full object-cover"
                                         />
                                     </div>
-                                    <div className="flex-grow">
+                                    <div className="grow">
                                         <h3 className="text-2xl font-bold text-foreground mb-4">{currentVideo.title}</h3>
                                     </div>
                                 </>
