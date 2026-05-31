@@ -283,7 +283,7 @@ export default function StreamView({
                             >
                                 <div className="flex items-start gap-4">
                                     {/* Thumbnail */}
-                                    <div className="flex-shrink-0 w-24 h-24 bg-card rounded overflow-hidden">
+                                    <div className="shrink-0 w-24 h-24 bg-card rounded overflow-hidden">
                                         <img
                                             src={video.smallImg || video.bigImg}
                                             alt={video.title}
@@ -292,7 +292,7 @@ export default function StreamView({
                                     </div>
 
                                     {/* Stream Info and Votes */}
-                                    <div className="flex-grow">
+                                    <div className="grow">
                                         <div className="flex items-start justify-between mb-3">
                                             <h3 className="text-lg font-semibold text-foreground">{video.title}</h3>
                                         </div>
