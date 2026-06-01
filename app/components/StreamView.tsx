@@ -65,7 +65,10 @@ export default function StreamView({
     } catch(e: any) {
       if (e?.response?.status === 403) {
         toast.error("You are not logged in. Please sign in to continue.", {
-          position: "bottom-center",
+            style: {
+                background: 'red'
+            },
+            position: "bottom-center",
         });
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
@@ -171,7 +174,11 @@ export default function StreamView({
     const shareableLink = `${window.location.host}/creator/${creatorId}`
     navigator.clipboard.writeText(shareableLink)
     toast.success("Link copied", { 
-      position: "bottom-center",
+        style: {
+            background: 'red'
+        },
+        position: "bottom-center",
+      
     })
   }
 
