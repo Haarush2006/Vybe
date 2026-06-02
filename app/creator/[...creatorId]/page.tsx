@@ -7,7 +7,7 @@ export default async function Page({params}:{
     
 }) {
     const {creatorId} = await params
-    console.log(creatorId)
+    
     const cid = creatorId[0]
     return <div>
         <StreamView creatorId={cid} playVideo={false} />
