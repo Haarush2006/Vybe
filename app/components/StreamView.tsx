@@ -228,22 +228,22 @@ export default function StreamView({
                                 </>
                             )}
                         </div>
-                        {playVideo && (
-                            <Button
-                                onClick={playNext}
-                                disabled={playNextLoader}
-                                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold mt-6"
-                                size="lg"
-                            >
-                                <Play className="mr-2 h-4 w-4" />
-                                {playNextLoader ? "Loading..." : "Play Next"}
-                            </Button>
-                        )}
                     </Card>
                 ) : (
                     <Card className="bg-card border-border p-12 text-center">
                         <p className="text-muted-foreground text-lg">No video playing</p>
                     </Card>
+                )}
+                {playVideo && (
+                    <Button
+                        onClick={playNext}
+                        disabled={playNextLoader}
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold mt-4 w-full"
+                        size="lg"
+                    >
+                        <Play className="mr-2 h-4 w-4" />
+                        {playNextLoader ? "Loading..." : "Play Next"}
+                    </Button>
                 )}
             </section>
 
